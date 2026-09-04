@@ -1,0 +1,25 @@
+# Chapter 7
+
+## Address Spaces and Virtual Memory
+
+A virtual address space in seL4 is called a VSpace. Similarly to a CSpace (see Chapter 3), a VSpace is composed of objects provided by the kernel. Unlike CSpaces, objects for managing virtual memory correspond to those of the hardware and each architecture defines its own object types for paging structures. Also unlike CSpaces, we call only the top-level paging structure a VSpace object. It provides the top-level authority to the VSpace.
+
+Common to all architectures is the Frame, representing a frame of physical memory. Frame objects are manipulated via Page capabilities, which represents both authority to the frame, as well as to the virtual memory mapping, i.e. the page, when mapped. The kernel also provides ASID Pool objects and ASID Control invocations for tracking the status of address space identifiers for VSpaces.
+
+These VSpace-related objects are sufficient to implement the hardware data structures required to create, manipulate, and destroy virtual memory address spaces. As usual, the manipulator of a virtual memory space needs the appropriate capabilities to the required objects.
+
+### 7.1 Objects
+
+#### 7.1.1 Hardware Virtual Memory Objects
+
+Each architecture has a top-level paging structure (level 0) and a number of intermediate levels. When referring to it generically, we call this top-level paging structure the VSpace object. The seL4 object type that implements the VSpace object is architecture dependent. For instance on AArch32, a VSpace is represented by the PageDirectory object and on x64 by a PML4 object.
+
+In general, each paging structure at each level contains slots where either the next level paging structure or a frame of memory can be mapped. The level of the paging structure determines the size of the frame. The size and type of structure at each level, and the number of bits in the virtual address resolved for that level are hardware defined.
+
+The seL4 kernel provides methods for operating on these hardware paging structures including mapping and cache operations. Mapping operations are invoked on the capability to the object being mapped. For example, to map a level 2 paging structure at a specific virtual address, we can invoke the map operation on the capability to the level 2 object and provide the virtual address as well as the capability to the level 1 object as arguments.
+
+If the previous level (level 1 in the example) is not itself already mapped, the mapping operation will fail. Developers need to create and map all paging structures, the kernel does not automatically create intermediate levels.
+
+In general, the VSpace object (the top-level paging structure) has no invocations for mapping, but is used as an argument to several other virtual-memory related object invocations. For some architectures, the VSpace object provides cache operation invocations. This allows simpler policy options: a process that has delegated a VSpace capability (e.g. to a page directory on AArch32) can conduct cache operations on all frames mapped from that capability without needing access to those capabilities directly.
+
+The rest of this section details the paging structures for each architecture.
