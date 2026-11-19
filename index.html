@@ -1,219 +1,348 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
+<html lang="ru" data-theme="dark" data-dir="auto" style="--font-size:48.0px;--line-height:1.70;--font-family:'MdCustom', -apple-system, 'Roboto', 'Noto Sans', sans-serif;--max-width:none;"><head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<meta name="description" content="Двадцать лет в Удмуртском университете на специальностях информационных технологий во главу математического цикла была поставлена логика. Данный курс составлен…">
-<title>НВПрЛог1 — Читалка</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231a73e8'/%3E%3Cpath d='M9 11h14M9 16h14M9 21h9' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>Часть I. Язык математики</title>
 <style>
-:root{
-  color-scheme: light dark;
-  --bg:#ffffff;
-  --surface:#f7f8fa;
-  --fg:#191c21;
-  --muted:#66707d;
-  --accent:#1a73e8;
-  --rule:#e3e7ec;
-  --max:44rem;
+/* Markdown Reader — document styles. Themes are CSS variables selected by <html data-theme="…">;
+   size / font / spacing / width come from inline custom properties set by the app (ReaderStyle). */
+
+:root, [data-theme="light"] {
+  --bg: #ffffff; --fg: #1f2328; --muted: #59636e; --link: #0969da; --border: #d1d9e0;
+  --code-bg: #f6f8fa; --code-fg: #1f2328; --quote: #59636e; --mark: #fff8c5; --stripe: #f6f8fa;
+  --note: #0969da; --tip: #1a7f37; --important: #8250df; --warning: #9a6700; --caution: #cf222e;
+  color-scheme: light;
 }
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#0e1116;
-    --surface:#151920;
-    --fg:#e6e9ee;
-    --muted:#98a2b0;
-    --accent:#7aa7f5;
-    --rule:#232a33;
-  }
+[data-theme="dark"] {
+  --bg: #0d1117; --fg: #e6edf3; --muted: #9198a1; --link: #4493f8; --border: #3d444d;
+  --code-bg: #151b23; --code-fg: #e6edf3; --quote: #9198a1; --mark: #bb800926; --stripe: #151b23;
+  --note: #4493f8; --tip: #3fb950; --important: #ab7df8; --warning: #d29922; --caution: #f85149;
+  color-scheme: dark;
 }
-*,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--fg);
-  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+[data-theme="amoled"] {
+  --bg: #000000; --fg: #e8e8e8; --muted: #9a9a9a; --link: #6cb6ff; --border: #2a2a2a;
+  --code-bg: #0e0e0e; --code-fg: #e8e8e8; --quote: #9a9a9a; --mark: #4d3d00; --stripe: #0a0a0a;
+  --note: #6cb6ff; --tip: #57c26a; --important: #b48cff; --warning: #e0a82e; --caution: #ff6a5f;
+  color-scheme: dark;
 }
-.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
-.site-header{background:var(--surface);border-bottom:1px solid var(--rule)}
-.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px}
-.brand{display:inline-flex;align-items:center;gap:9px;font-size:15px;font-weight:700;letter-spacing:-.01em}
-.brand-mark{width:20px;height:20px;border-radius:6px;background:var(--accent)}
-.site-nav{font-size:14px;color:var(--muted)}
-main{padding:44px 0 56px}
-.article-header{margin:0 0 32px;padding-bottom:24px;border-bottom:1px solid var(--rule)}
-.kicker{margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
-h1{margin:0 0 14px;font-size:clamp(1.7rem,4.4vw,2.4rem);line-height:1.18;letter-spacing:-.02em}
-.byline{margin:0;font-size:14px;color:var(--muted)}
-.article-body{font-size:1.0625rem}
-.article-body p{margin:0 0 1.15em}
-.article-body p.lead{font-size:1.18rem;line-height:1.55}
-.article-body h2{margin:1.9em 0 .6em;font-size:1.4rem;line-height:1.3;letter-spacing:-.01em}
-.article-body h3{margin:1.6em 0 .5em;font-size:1.18rem;line-height:1.35}
-.article-body h4{margin:1.4em 0 .4em;font-size:1.05rem}
-.site-footer{background:var(--surface);border-top:1px solid var(--rule);padding:22px 0;font-size:13px;color:var(--muted)}
-.site-footer .wrap{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between}
-@media (max-width:600px){
-  main{padding:28px 0 40px}
-  .article-body{font-size:1.03rem}
+[data-theme="sepia"] {
+  --bg: #f4ecd8; --fg: #433422; --muted: #7a6650; --link: #8b4513; --border: #d8c9a8;
+  --code-bg: #ebe0c4; --code-fg: #433422; --quote: #7a6650; --mark: #f2d98b; --stripe: #efe5cc;
+  --note: #2f6690; --tip: #4f7a28; --important: #6e4a8e; --warning: #9a6a00; --caution: #a33a2a;
+  color-scheme: light;
 }
+[data-theme="solarized"] {
+  --bg: #fdf6e3; --fg: #586e75; --muted: #839496; --link: #268bd2; --border: #e3dcc6;
+  --code-bg: #eee8d5; --code-fg: #586e75; --quote: #839496; --mark: #f5e7b0; --stripe: #f6efd9;
+  --note: #268bd2; --tip: #859900; --important: #6c71c4; --warning: #b58900; --caution: #dc322f;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; background: var(--bg); }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font-family, sans-serif); font-size: var(--font-size, 16px);
+  line-height: var(--line-height, 1.6);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.markdown-body {
+  max-width: var(--max-width, 48em); margin: 0 auto; padding: 16px 18px 56px;
+  overflow-wrap: break-word; word-wrap: break-word;
+}
+.markdown-body > :first-child { margin-top: 0 !important; }
+
+h1, h2, h3, h4, h5, h6 { margin: 1.5em 0 0.6em; font-weight: 600; line-height: 1.25; scroll-margin-top: 12px; }
+h1 { font-size: 2em; padding-bottom: .3em; border-bottom: 1px solid var(--border); }
+h2 { font-size: 1.5em; padding-bottom: .3em; border-bottom: 1px solid var(--border); }
+h3 { font-size: 1.25em; } h4 { font-size: 1em; } h5 { font-size: .875em; } h6 { font-size: .85em; color: var(--muted); }
+p, ul, ol, dl, table, pre, blockquote, .table-wrap, details { margin: 0 0 1em; }
+a { color: var(--link); text-decoration: none; }
+a:active { text-decoration: underline; }
+hr { height: .25em; padding: 0; margin: 1.5em 0; background: var(--border); border: 0; border-radius: 2px; }
+img, video, svg { max-width: 100%; height: auto; }
+img { border-radius: 4px; }
+img.broken {
+  display: inline-block; min-width: 6em; padding: .4em .6em; font-size: .85em; color: var(--muted);
+  border: 1px dashed var(--border); border-radius: 6px;
+}
+mark { background: var(--mark); color: inherit; padding: 0 .15em; border-radius: 3px; }
+kbd {
+  display: inline-block; padding: 0 .4em; font: .85em monospace; border: 1px solid var(--border);
+  border-bottom-width: 2px; border-radius: 5px; background: var(--code-bg);
+}
+ul, ol { padding-inline-start: 1.8em; }
+li + li { margin-top: .25em; }
+li > ul, li > ol { margin-bottom: 0; }
+
+/* GFM task lists */
+li:has(> input[type="checkbox"]) { list-style: none; }
+li > input[type="checkbox"] { margin: 0; margin-inline: -1.5em .45em; width: 1em; height: 1em; vertical-align: -0.12em; accent-color: var(--link); }
+
+blockquote { padding: 0 1em; color: var(--quote); border-inline-start: .25em solid var(--border); }
+blockquote > :last-child { margin-bottom: 0; }
+
+/* Code */
+code, pre, .raw { font-family: 'Roboto Mono', 'Droid Sans Mono', 'Noto Sans Mono', monospace; }
+:not(pre) > code {
+  padding: .15em .4em; font-size: 85%; background: var(--code-bg); color: var(--code-fg); border-radius: 6px;
+}
+pre {
+  position: relative; padding: 14px 16px; overflow-x: auto; font-size: 85%; line-height: 1.45;
+  background: var(--code-bg); color: var(--code-fg); border-radius: 8px; border: 1px solid var(--border);
+}
+pre code, pre code.hljs { padding: 0; background: transparent; font-size: 100%; display: block; overflow: visible; }
+.code-block { position: relative; margin: 0 0 1em; }
+.code-block > pre { margin: 0; padding-top: 34px; }
+.code-head {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 1; display: flex; align-items: center;
+  justify-content: space-between; height: 30px; padding: 0 6px 0 14px; font: 12px sans-serif; color: var(--muted);
+}
+.copy-btn {
+  font: 12px sans-serif; color: var(--muted); background: transparent; border: 1px solid var(--border);
+  border-radius: 6px; padding: 3px 10px;
+}
+.copy-btn.done { color: var(--tip); border-color: var(--tip); }
+
+/* Tables */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; border-spacing: 0; width: max-content; max-width: none; margin: 0; }
+.table-wrap > table { margin-bottom: 0; }
+th, td { padding: 6px 13px; border: 1px solid var(--border); vertical-align: top; }
+th { font-weight: 600; background: var(--stripe); }
+tr:nth-child(2n) td { background: var(--stripe); }
+
+/* Front matter card */
+.front-matter { margin: 0 0 1.5em; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: .88em; }
+.front-matter table { width: 100%; }
+.front-matter th, .front-matter td { border: 0; border-bottom: 1px solid var(--border); background: transparent !important; }
+.front-matter tr:last-child th, .front-matter tr:last-child td { border-bottom: 0; }
+.front-matter th { width: 30%; color: var(--muted); text-align: start; font-weight: 500; white-space: nowrap; }
+
+/* Callouts (GitHub alerts, Obsidian callouts) */
+.callout { --c: var(--note); border-inline-start-color: var(--c); color: var(--fg); padding: .5em 1em; }
+.callout-title { color: var(--c); font-weight: 600; margin-bottom: .4em; }
+.callout-title::before { display: inline-block; width: 1.3em; }
+.callout-note { --c: var(--note); } .callout-note .callout-title::before { content: "ℹ"; }
+.callout-tip { --c: var(--tip); } .callout-tip .callout-title::before { content: "💡"; }
+.callout-important { --c: var(--important); } .callout-important .callout-title::before { content: "❗"; }
+.callout-warning { --c: var(--warning); } .callout-warning .callout-title::before { content: "⚠"; }
+.callout-caution { --c: var(--caution); } .callout-caution .callout-title::before { content: "⛔"; }
+
+/* Math + diagrams */
+.math-display { display: block; overflow-x: auto; overflow-y: hidden; margin: 0 0 1em; padding: .2em 0; }
+span.math-display { margin: .5em 0; }
+.math-error { color: var(--caution); font-family: monospace; }
+.mermaid { margin: 0 0 1em; text-align: center; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+.mermaid-error { color: var(--caution); font-size: .85em; text-align: left; }
+
+/* Footnotes */
+.footnotes { font-size: .88em; color: var(--muted); border-top: 1px solid var(--border); margin-top: 2em; padding-top: 1em; }
+sup { line-height: 0; }
+
+details { border: 1px solid var(--border); border-radius: 8px; padding: .5em .9em; }
+summary { cursor: pointer; font-weight: 600; }
+
+/* .txt files and the "raw source" view */
+pre.plain, pre.raw {
+  white-space: pre-wrap; word-break: break-word; background: transparent; border: 0; padding: 0;
+  font-size: 92%; color: var(--fg); overflow: visible;
+}
+pre.plain { font-family: var(--font-family, sans-serif); font-size: 100%; line-height: var(--line-height, 1.6); }
+
+/* Text direction (Appearance > Text direction). Per-paragraph `dir` attributes are set by reader.js for
+   "auto" and "center"; "rtl" / "ltr" flip the whole document here. Code, formulas and diagrams stay LTR. */
+pre, code, .code-block, .katex, .katex-display, .mermaid, .math-display, kbd { direction: ltr; unicode-bidi: isolate; }
+pre, .code-block { text-align: left; }
+html[data-dir="rtl"] #content { direction: rtl; }
+html[data-dir="ltr"] #content { direction: ltr; }
+#content .tts-now { background: var(--mark); border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+html[data-dir="auto"] #content li[data-flip][dir="rtl"] { margin-left: -1.8em; margin-right: 1.8em; }
+html[data-dir="auto"] #content li[data-flip][dir="ltr"] { margin-right: -1.8em; margin-left: 1.8em; }
+html[data-dir="center"] #content :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, td, th, dt, dd, summary, figcaption, .callout-title) { text-align: center; }
+html[data-dir="center"] #content :is(ul, ol) { list-style-position: inside; padding-inline-start: 0; }
+html[data-dir="center"] #content li > input[type="checkbox"] { margin-inline: 0 .45em; }
+html[data-dir="center"] #content blockquote { border-inline-start-width: 0; border-block-start: .25em solid var(--border); padding-top: .4em; }
+html[data-dir="center"] #content table { margin-inline: auto; }
+
+/* Find-in-page highlight is native; this is the flash after a TOC jump */
+.flash { animation: flash 1.2s ease-out; }
+@keyframes flash { from { background: var(--mark); } to { background: transparent; } }
+
+@media print {
+  .copy-btn { display: none; }
+  .markdown-body { max-width: none; padding: 0; }
+  pre, table, .mermaid, .math-display, img, blockquote { break-inside: avoid; }
+  h1, h2, h3, h4 { break-after: avoid; }
+  pre { white-space: pre-wrap; word-break: break-word; }
+  .table-wrap { overflow: visible; }
+}
+body.exported .markdown-body { padding-top: 32px; }
+
+pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
+  Theme: GitHub Dark
+  Description: Dark theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-dark
+  Current colors taken from GitHub's CSS
+*/.hljs{color:#c9d1d9;background:#0d1117}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#ff7b72}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#d2a8ff}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#79c0ff}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#a5d6ff}.hljs-built_in,.hljs-symbol{color:#ffa657}.hljs-code,.hljs-comment,.hljs-formula{color:#8b949e}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#7ee787}.hljs-subst{color:#c9d1d9}.hljs-section{color:#1f6feb;font-weight:700}.hljs-bullet{color:#f2cc60}.hljs-emphasis{color:#c9d1d9;font-style:italic}.hljs-strong{color:#c9d1d9;font-weight:700}.hljs-addition{color:#aff5b4;background-color:#033a16}.hljs-deletion{color:#ffdcd7;background-color:#67060c}
 </style>
-</head>
-<body>
+<style data-hyphenizer="1">/* ==== Автопереносы: вставлено русификатором ==== */
+html, body {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 6 2 3;
+  hyphenate-limit-zone: 8%;
+  hyphenate-limit-lines: 3;
+}
+article, article p, article li, article dd, article dt,
+article blockquote, article td, article th, article figcaption,
+article summary, article h1, article h2, article h3,
+article h4, article h5, article h6 {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+/* Код, формулы, схемы — не переносим */
+pre, code, kbd, samp, var, tt,
+.katex, .katex-display, .math-display, .mermaid, .raw, .hljs {
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}
+article p, article li, article dd, article blockquote p {
+  text-align: justify;
+  text-justify: inter-word;
+}</style></head>
+<body class="exported">
+<article id="content" class="markdown-body" lang="ru">
 
-<header class="site-header">
-  <div class="wrap">
-    <span class="brand"><span class="brand-mark" aria-hidden="true"></span>Читалка</span>
-    <span class="site-nav">Статья</span>
-  </div>
-</header>
+<p dir="ltr" data-ad="1">Ниже — глава 1 целиком. Опечатки и рассогласования текста исправлены, формулы записаны линейно (без LaTeX), а сноски и связанные с ними авторские замечания из «Дополнения II» развёрнуты прямо по ходу текста.</p>
+<h1 id="часть-i-язык-математики" dir="ltr" data-ad="1">Часть I. Язык математики</h1>
+<h2 id="глава-1-необходимость-точного-языка-в-математике" dir="ltr" data-ad="1">Глава 1. Необходимость точного языка в математике</h2>
+<h3 id="11-как-и-почему-появился-язык-математической-логики" dir="ltr" data-ad="1">1.1. Как и почему появился язык математической логики?</h3>
+<p dir="ltr" data-ad="1"><strong>Математика изучает объекты, свойства которых точно сформулированы.</strong></p>
+<p dir="ltr" data-ad="1">Это описание поля деятельности современной математики не претендует на полноту. Оно, скорее, достаточно широко и отбрасывает лишь те случаи, когда говорить о применении математики ещё рано. Описание включает и традиционные разделы, такие как геометрия и алгебра, и новые, такие как математическая лингвистика либо теория генетического кода.</p>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора (замечание 12).</strong> Тем не менее и там вовсю пытаются применять математическую символику, используя, как выразился Леви-Стросс, «формулы как узор, украшающий текст». В частности, таковы многие современные работы по культурологии, философии и т. п. Критерий распознавания такого наукообразия прост: понятия не уточняются. Далее, часто квалифицированный математик легко находит противоречия в узорах, вставленных в текст. Но порою узоры внутренне непротиворечивы и просто не имеют отношения к окружающему их тексту: это — высшая степень надувательства. Она частенько возникает в заказных работах, когда заказчику нужно обосновать уже принятое решение или красиво отчитаться, что у нас и настоящая теория есть. Иногда математики пользуются этим, чтобы получить неплохие теоретические результаты и опубликовать их со ссылкой на практическое приложение.</p>
+<p dir="ltr" data-ad="1">Такой метод работы называется реникса (от латинского написания этого слова — renyxa). Порою он защищает разумные новые постановки задач от огульной критики математиков: «А кто так ставил задачу? Откуда формулировка?». Вспомните описание обычаев математиков во Введении.</p>
+</blockquote>
+<p dir="ltr" data-ad="1">Хотя само описание говорит о точных формулировках, в нём требуют разъяснения в первую очередь последние слова: «точно сформулированы». Очевидно, что их уточнение влечёт за собой уточнение и других понятий, в частности ‘объекта’ и ‘свойства’. Какие формулировки можно считать точными, постараемся разобраться дальше.</p>
+<p dir="ltr" data-ad="1">Очевидно, что не всё, выражающееся на естественном языке, точно. Иногда такая неточность лежит на поверхности, как, например, во фразах: «Хочется чего-то, а чего — неясно» или «Оно, конечно, ежели что как... А ежели что не так?». Иногда смысл фразы явно зависит от контекста, например: «Сейчас я намылю ему шею». Богатство любого естественного языка неразрывно связано с его многозначностью. Зависимость от контекста не всегда отрицательный фактор, лишь бы в любой данной ситуации предложение уточнялось однозначно. Например, достаточно безобидное на вид предложение</p>
+<p dir="ltr" data-ad="1">«Он встретил её на поляне с цветами» (1.1)</p>
+<p dir="ltr" data-ad="1">имеет три различных истолкования. Вот от такой неоднозначности хотелось бы раз и навсегда застраховаться в математике. Поэтому математики с самого начала стремились формулировать доказательства и теоремы на как можно более чётком, хотя и бедном, диалекте естественного языка. Словарный запас этого диалекта постоянно расширяется, но основные формы предложений, связки, союзы остаются практически теми, что были выработаны ещё в античные времена. Следует заметить, что способы выражения, допустимые в математике, нигде не описывались явно: ими овладевали на примерах, в процессе обучения и чтения классических трудов, в первую очередь «Элементов» Евклида.</p>
+<p dir="ltr" data-ad="1">Долгое время считалось, что ‘математический диалект’ состоит из строго сформулированных предложений, да и сейчас он верно служит математикам, почти никогда их не подводя. В геометрии и до сих пор его достаточно. Но уже в средние века развитие алгебры привело к тому, что формулировки теорем зачастую становились всё длиннее, необозримее и неудобнее. Соответственно, выкладки становились всё более и более трудными. В самом деле, даже чтобы понять фразу</p>
+<p dir="ltr" data-ad="1">«Квадрат первого, сложенный с квадратом второго и с удвоенным произведением первого на второе, есть квадрат первого, сложенного со вторым» (1.2)</p>
+<p dir="ltr" data-ad="1">требуется значительное усилие. Таким образом, математическая строгость и удобство начали противоречить друг другу.</p>
+<p dir="ltr" data-ad="1">Выход был найден, когда заметили, что использованная в (1.2) часть математического языка может быть сведена к нескольким условным знакам, и сейчас (1.2) записывается кратко и ясно:</p>
+<p dir="ltr" data-ad="1">x² + 2xy + y² = (x + y)². (1.3)</p>
+<p dir="ltr" data-ad="1">Это стало первым этапом уточнения математического языка: был создан символизм арифметических выражений, их равенств и неравенств. К XVIII веку математические формулы записывались почти в том же виде, что и сейчас.</p>
+<p dir="ltr" data-ad="1">Однако более сложные математические утверждения по-прежнему записывались на обычном языке с вкраплениями формул. И чем дальше развивалась математика, чем больше понятий входило в её словарь, тем ближе придвигались к её границам парадоксы, связанные с неоднозначностью и недоопределённостью предложений естественного языка. Рассмотрим один из самых ярких и элементарных примеров.</p>
+<p dir="ltr" data-ad="1">Как известно, некоторые фразы служат определениями натуральных чисел, например:</p>
+<p dir="ltr" data-ad="1">«Десять в степени десять в степени десять» (1.4)</p>
+<p dir="ltr" data-ad="1">«Наименьшее простое число, большее миллиона» (1.5)</p>
+<p dir="ltr" data-ad="1">В русском языке 33 буквы, и предложений, состоящих не более чем из ста букв, конечное число (грубо говоря, не более 33 в степени 101). Натуральных чисел же бесконечно много. Значит, среди них должны быть такие, которые нельзя назвать фразой, состоящей менее чем из ста букв. Но тогда есть и наименьшее такое число. Его можно определить как</p>
+<p dir="ltr" data-ad="1">‘Наименьшее натуральное число, которое нельзя определить фразой русского языка, содержащей менее ста букв’. (1.6)</p>
+<p dir="ltr" data-ad="1">Это предложение содержит 96 букв. Следовательно, определение (1.6) противоречит самому себе.</p>
+<p dir="ltr" data-ad="1">(Парадокс Берри. 1906 г.)</p>
+<p dir="ltr" data-ad="1">Три разнородных примера его появления в практике даны в примечании ниже.</p>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора (замечание 13).</strong> Несерьёзный, но актуальный пример попадания в «ловушку рекурсии» — следующая цитата из чата:</p>
+<p dir="ltr" data-ad="1">Silver_Axe: я вот за эту фразу получил 15 мин. молчи — 11:47</p>
+<p dir="ltr" data-ad="1">Silver_Axe — Aleksey_AD: напиши в чат больше 5 однотипных знаков и получишь проклятие молчания, например ээээээээээ</p>
+<p dir="ltr" data-ad="1">Более серьёзный пример на ту же тему. В одной из первых советских систем обработки текстов (Эпсилон, Новосибирск), поскольку в тот момент не было понятия «конец файла», в качестве знака конца текста была использована последовательность букв, никогда не встречающаяся в русских текстах, а именно «ЪЪЪ». После этого система не смогла обработать своё собственное описание.</p>
+<p dir="ltr" data-ad="1">И самый серьёзный пример: в России весьма актуально создание словаря нецензурных выражений для формального использования, скажем, в судебных заседаниях. Но официально принять такой словарь не удаётся, поскольку он сам будет нарушать закон о нецензурных выражениях.</p>
+</blockquote>
+<p dir="ltr" data-ad="1">Казалось бы, рассуждение из парадокса Берри явно нематематическое. Однако уже в те времена подобные конструкции встречались в теории множеств, а сейчас рассуждения такого рода обычны в разделах математической логики и теории алгоритмов, исследующих сложность описания математических объектов. В частности, подобная идея лежит в основе знаменитой теоремы Гёделя о неполноте любой достаточно сильной формальной теории.</p>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора.</strong> Эта теорема является одной из целей нашего курса.</p>
+</blockquote>
+<p dir="ltr" data-ad="1">Если парадокс Берри возник на границе между математикой и естественным языком, то парадокс Рассела возник внутри самой математики — в теории множеств.</p>
+<p dir="ltr" data-ad="1">Пусть z — множество тех множеств, которые не являются собственными элементами. То есть x ∈ z тогда и только тогда, когда неверно, что x ∈ x. Символически:</p>
+<p dir="ltr" data-ad="1">z = {x | x ∉ x}.</p>
+<p dir="ltr" data-ad="1">Подставляя z вместо x в определение z, получаем, что z ∈ z тогда и только тогда, когда z ∉ z. (1.7)</p>
+<p dir="ltr" data-ad="1">Появление первых парадоксов внутри математики ошеломило сообщество специалистов и послужило поводом, чтобы предпринять систематическое построение современной логики. А причиной её возникновения было то, что математический диалект естественного языка опять-таки, как и в средние века, перестал удовлетворять требованиям компактности и удобства при записи формулировок теорем, и в особенности при манипуляциях с этими формулировками. Например, вот одно из элементарных определений математического анализа:</p>
+<p dir="ltr" data-ad="1">«Функция f, определённая на множестве M, непрерывна на M, если для каждого x из M и для любого сколь угодно малого положительного ε найдётся такое положительное δ, зависящее от ε, что, когда x₁ лежит в M и отличается от x меньше, чем на δ, f(x₁) отличается от f(x) меньше, чем на ε». (1.8)</p>
+<p dir="ltr" data-ad="1">Построить, скажем, отрицание понятия непрерывности, содержательно вдаваясь в смысл фразы (1.8), не менее трудно, чем преобразовывать алгебраические тождества, записанные в виде (1.2). В современном символизме «f непрерывна на M» записывается компактно и изящно:</p>
+<p dir="ltr" data-ad="1">∀x ∈ M ∀ε &gt; 0 ∃δ &gt; 0 ∀x₁ ∈ M (|x − x₁| &lt; δ ⇒ |f(x) − f(x₁)| &lt; ε). (1.9)</p>
+<p dir="ltr" data-ad="1">Язык математической логики, ставший символическим языком современной математики, возник в тот момент, когда неудобство математического языка для нужд математики было окончательно осознано. Так же, как и символизм алгебраических выражений, новый символизм прояснил механическую природу многих преобразований, позволил дать простые алгоритмы их осуществления и тем самым освободил головы математиков для более важных дел.</p>
+<p dir="ltr" data-ad="1">Кроме того, впервые появилась возможность строго ответить на вопрос: а что значит ‘точно сформулированное высказывание’? Это высказывание, которое может быть однозначно переведено на символический язык математики.</p>
+<p dir="ltr" data-ad="1">В дальнейшем язык математической логики был успешно применён и к областям, которые лежат вне рамок математики как науки и резко отличаются от неё по своей парадигме: информатика, философия, лингвистика, психология и так далее, — тем самым превратившись из языка математической логики в язык логики.</p>
+<p dir="ltr" data-ad="1">Формализация математики привела к более ясному осознанию природы самой математики, к триумфальному применению её к нечисловым и непространственным объектам, таким как, например, гены, естественные и искусственные языки, программы для ЭВМ и т. д. Вместе с тем стало ясно и то, когда не стоит применять математику. До тех пор, пока наши знания о некоторой конкретной области не могут быть переведены на формальный математический язык единообразным методом, мы ещё не осознали исходные понятия и их свойства настолько, чтобы применять математические методы, и “математизация” превращается в род шаманства, призванного придать наукообразие тексту. А когда можно точно сформулировать свойства ясно выделенных нами исходных понятий, можно применять математику для извлечения следствий из этих свойств.</p>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора.</strong> В лучшем случае — в рениксе (о нём см. примечание 12 выше).</p>
+</blockquote>
+<p dir="ltr" data-ad="1">Итак, первой проблемой, которую поставила жизнь перед математической логикой, была следующая.</p>
+<p dir="ltr" data-ad="1"><strong>Основная задача языка математики.</strong> Дать точное и удобное определение математического суждения, то есть определить язык, который удовлетворял бы трём требованиям:</p>
+<ol dir="ltr" data-ad="1">
+<li dir="ltr" data-ad="1">на этот язык можно перевести математические утверждения и точные утверждения некоторых других наук;</li>
+<li dir="ltr" data-ad="1">он допускает сравнительно лёгкий перевод на обычный язык;</li>
+<li dir="ltr" data-ad="1">записи на нём компактны и удобны в обращении. (1.10)</li>
+</ol>
+<p dir="ltr" data-ad="1">Первая часть нашего пособия посвящена демонстрации используемого в современной математике решения этой проблемы. Мы стремимся осветить с единой точки зрения язык и дать навыки владения этим языком.</p>
+<p dir="ltr" data-ad="1">В сущности, в первой части почти не затрагивается материал собственно логики как науки, в нём выдерживается лишь логический подход к изучаемым понятиям. Сама логика начинается со второй задачи, неразрывно связанной с основной задачей языка математики.</p>
+<p dir="ltr" data-ad="1"><strong>Основная задача логической семантики.</strong> Дать чёткое и однозначное истолкование суждений формального языка, одновременно как можно более простое и как можно более близкое к естественному математическому пониманию. (1.11)</p>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора.</strong> Семантика — наука, изучающая смысл предложений естественного либо формального языка.</p>
+</blockquote>
+<p dir="ltr" data-ad="1">Конечно же, мы вынуждены касаться отдельных аспектов этой задачи уже в первой части, но лишь в простейших случаях.</p>
+<p dir="ltr" data-ad="1"><strong>Подытожим.</strong></p>
+<p dir="ltr" data-ad="1"><em>Объект логики</em></p>
+<ul dir="ltr" data-ad="1">
+<li dir="ltr" data-ad="1">Труднее всего поддаётся уточнению само понятие точности.</li>
+<li dir="ltr" data-ad="1">Формальный язык должен полностью исключать неоднозначности.</li>
+<li dir="ltr" data-ad="1">Смысл предложений формального языка должен быть строго и до конца определён, и поэтому все понятия становятся терминами.</li>
+<li dir="ltr" data-ad="1">Не всякое использование формального языка ведёт к уточнению.</li>
+<li dir="ltr" data-ad="1">Формальная проверка зачастую сильнее содержательной.</li>
+<li dir="ltr" data-ad="1">Формальный язык позволяет значительно эффективнее преобразовывать выражения, чем содержательный.</li>
+<li dir="ltr" data-ad="1">Содержательная проверка не может быть полностью заменена формальной, а формальная — содержательной.</li>
+<li dir="ltr" data-ad="1">Содержательный язык не может быть полностью заменён формальным, но абсурдно использовать его, когда решаемая задача полностью уточнена и ложится на язык логики.</li>
+</ul>
+<p dir="ltr" data-ad="1"><em>Предмет логики</em></p>
+<ul dir="ltr" data-ad="1">
+<li dir="ltr" data-ad="1">Математическая логика — наука, изучающая саму математику математическими средствами.</li>
+<li dir="ltr" data-ad="1">Логика не сводится к математической логике, поскольку не ограничивается в своей области исследований и приложений лишь математикой и не связана традициями математики.</li>
+<li dir="ltr" data-ad="1">Логика изучает формальную структуру рассуждений прежде всего математическими средствами.</li>
+<li dir="ltr" data-ad="1">Когда сложность утверждений науки либо практики превосходит определённый предел, начинается либо процесс формализации, либо процесс распада (см. постмодернизм в качестве примера процесса распада).</li>
+<li dir="ltr" data-ad="1">Не всякая точная задача ложится на язык логики.</li>
+</ul>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора.</strong> Это замечание необходимо сделать уже сейчас, хотя раскрываться оно будет и в дальнейшем, и в течение всей Вашей жизни. Тот, кто не осознаёт ограничений используемых им методов и использует их в неподходящем месте, обычно называется профессиональным кретином.</p>
+</blockquote>
+<p dir="ltr" data-ad="1"><strong>Упражнения к § 1.1</strong></p>
+<p dir="ltr" data-ad="1">1.1.1. (Л. С. Выготский) Сколько различных смыслов имеет предложение: «Предложение рабочих бригад вызвало осуждение товарища Иванова»?</p>
+<p dir="ltr" data-ad="1">1.1.2. (Х. Б. Карри) Докажите, что из существования множества всех таких множеств x, что если x является своим элементом, то выполнено A, следует, что A истинно.</p>
+<p dir="ltr" data-ad="1">1.1.3. Какое из предложений (1.4), (1.5) неоднозначно? Как его переформулировать, чтобы оно стало однозначным?</p>
+<h3 id="12-зачем-изучать-формальный-язык-математики" dir="ltr" data-ad="1">1.2. Зачем изучать формальный язык математики?</h3>
+<p dir="ltr" data-ad="1">Сейчас мне даже не приходится убеждать Вас, что для точных областей деятельности необходимо создавать точный формальный язык. Такие языки проникли повсюду вместе с компьютерами и другими подобными устройствами.</p>
+<p dir="ltr" data-ad="1">Но остаётся второй вопрос: а так ли необходимо изучать именно язык логики, если Вы не собираетесь быть специалистом именно по логике? Ведь столько лет без него обходились, и сейчас даже многие математики и информатики всю жизнь без него обходятся, — почему бы не обойтись и Вам?</p>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора.</strong> Как заявила одна доцент на заседании Учёного Совета: «Лично мне в жизни логика ни разу не понадобилась». Сам этот факт говорит о пещерном уровне мышления многих узко ориентированных специалистов: она поняла, что сморозила, лишь когда все засмеялись.</p>
+</blockquote>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора (замечание 14).</strong> И через 20 лет на заседании другого учёного совета, посвящённого ковиду, где я обосновывал, что «борьба» против него имеет все признаки наглого распила средств, профессор заявила: «Но ведь умереть можно!» Я логично ответил: «Обязательно умрёте, потому что родились». У неё началась истерика: «Как Вы смеете такие гадости говорить?» Это показывает, как логическое невежество облегчает манипуляцию, казалось бы, очень умными людьми.</p>
+</blockquote>
+<p dir="ltr" data-ad="1">Первый из возможных ответов на данный вопрос: незнание мощных и простых методов преобразований математических предложений, предоставляемых языком логики, гораздо хуже, чем неумение считать производные или незнание основ алгебры. Просто грех не пользоваться точными и едиными правилами там, где они уже проработаны, и каждый раз изобретать заново велосипед Артамонова. А формальные методы преобразования с успехом применяются и к содержательному языку. При этом возникает диаграмма, представленная на рис. 1.1.</p>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора.</strong> Артамонов — мастер-самоучка, в царствование Николая I приехавший с Урала в Питер на самодельном велосипеде.</p>
+</blockquote>
+<p dir="ltr" data-ad="1"><em>Рис. 1.1. Схема деятельности информатика и аналитика.</em> (В книге здесь помещён рисунок; в текстовой версии графика отсутствует.)</p>
+<p dir="ltr" data-ad="1">Такая последовательность операций, осложнённая взаимодействием с заказчиком либо с другими людьми, не владеющими навыками формального анализа информации и не умеющими точно формулировать свои мысли, является основной в деятельности профессионала-информатика. Один из самых мощных способов преобразования точных высказываний — логика. А какие-нибудь “непосредственно применимые” языки конкретных систем и даже мощный язык программирования (скажем, C++ или Java) — худшие средства для таких преобразований.</p>
+<p dir="ltr" data-ad="1">Второй ответ требует апелляции к опыту использования современных формальных языков, прежде всего языков программирования.</p>
+<p dir="ltr" data-ad="1">В нынешние времена люди всё равно вынуждены изучать искусственные, формальные языки. В частности, имея дело с вычислительной машиной, Вы не обойдётесь без знакомства (хотя бы шапочного) по крайней мере с двумя-тремя искусственными языками. А уж если Вы собираетесь быть постановщиком задач, руководителем высокоинтеллектуального производства, системным аналитиком или математиком-прикладником, для которых в первую очередь предназначено данное пособие, то без глубокого знания алгоритмических языков не обойтись. Но этим нельзя ограничиться, если Вы стремитесь подняться выше чисто ремесленного уровня (и заодно выше низшего уровня в служебной иерархии).</p>
+<p dir="ltr" data-ad="1">Первым точно определённым формальным языком стал язык математической логики. Он создан в конце XIX века в работах итальянского математика Джузеппе Пеано и его учеников. Затем логический язык улучшали Бертран Рассел и Давид Гильберт в начале XX века. Он доказал на практике свою жизнеспособность и устойчивость. Во множестве формальных языков программирования, математической лингвистики и искусственного интеллекта, сменяющихся каждые десять лет, он является гранитной скалой среди тающих айсбергов. В логическом языке проведены многие концепции, позже перенятые языками программирования и искусственного интеллекта. Причём, как правило, в логике концепции представлены в гораздо более последовательной и красивой форме. Знать логический язык необходимо хотя бы для того, чтобы видеть, что к чему в этом бурлящем море неустойчивых частных формальных языков. Как показал опыт моих выпускников, владение логикой часто позволяет не изучать новые сущности, а быстро осваивать их (в частности, новые языки программирования почти всегда). Как и в случае с обучающими программами (см. предисловие), классические идеи не стареют, меняются лишь способы их выражения — логический язык перешёл в разряд классики.</p>
+<p dir="ltr" data-ad="1">Третий ответ связан со спецификой самой работы системного аналитика и прикладного математика.</p>
+<p dir="ltr" data-ad="1">В прикладной математике исследователь должен всё время заниматься переводами с содержательного языка на математический, с математического — на язык численных методов и алгоритмов, с алгоритмов — на язык программирования и обратно. Многоязыковость неизбежна: она вызвана необходимостью находить точные и реализуемые решения задач, возникающих на практике.</p>
+<blockquote dir="ltr" data-ad="1">
+<p dir="ltr" data-ad="1"><strong>Примечание автора (замечание 15).</strong> Например, услышав о проблеме, что нагрев сырья в печи недостаточно равномерен, исследователь должен сообразить, что передача тепла описывается параболическими дифференциальными уравнениями в частных производных.</p>
+<p dir="ltr" data-ad="1">Если уважаемый читатель не знает, что это такое, пусть не расстраивается: это должен знать специалист, и даже многие известные автору блестящие математики-прикладники этого не знают. Нужно развивать свою внутреннюю “базу знаний”, пополняя её даже тем, что сам не знаешь как следует. Тут важно лишь понимать, к какой области это относится, к какому специалисту следует обратиться, встретившись с данным понятием, и как, хотя бы самым грубым образом, перепроверить предложенное специалистом решение. Ведь никто не может знать всего, а нынче никто не может знать всего даже</p>
+</blockquote>
 
-<main>
-  <div class="wrap">
-    <article class="article">
-      <header class="article-header">
-        <p class="kicker">Статья</p>
-        <h1>НВПрЛог1</h1>
-        <p class="byline">≈ 22 мин чтения · абзацев: 124</p>
-      </header>
-      <div class="article-body">
-<p class="lead">Двадцать лет в Удмуртском университете на специальностях информационных технологий во главу математического цикла была поставлена логика. Данный курс составлен так, чтобы он мог быть головным в теоретическом цикле для студентов специальностей типа информационные системы, программирование, философия, математическая лингвистика, когнитивная психология. Но в условиях конкретного университета для такого важного курса может быть недостаточно материала данной книги.</p>
-<p>Современная прикладная логика содержит следующие разделы:<br>1. Логический анализ естественных языков.<br>2. Логическая семантика и формальный синтаксис.<br>3. Теория доказательств.<br>4. Представление знаний в интеллектуальных системах.<br>5. Теория алгоритмов и автоматов.<br>6. Автоматическое доказательство теорем.<br>7. Конструктивные логики и логическое программирование.<br>8. Сложность вычислений.<br>9. Логика функций и логика программ.<br>10. Теория возможных миров, контекстов и установок.<br>11. Индуктивные выводы, формирование понятий и распознавание образов.<br>12. Неточные, немонотонные, нечеткие выводы.<br>13. Теория типов данных.<br>14. Теория взаимодействующих процессов.<br>15. Теория рефлексивных рассуждений.<br>16. Теория неформализуемых понятий.</p>
-<p>В данном пособии материал многих разделов лишь затронут (и то неравномерно). Полное изложение всего перечисленного с такой же степенью методической проработанности и подробности, которая выдерживается в большинстве глав данного пособия, потребовало бы по</p>
-<p>IN.3. КАК РАБОТАТЬ С ДАННОЙ КНИГОЙ? xxiii меньшей мере четырёхтомника и колоссального труда по накоплению массивов задач и подбору методов изложения материала, представленного до сих пор в основном в статьях и монографиях.</p>
-<p>Стоит сказать об отношении к ошибкам. Человеку свойственно ошибаться. Не ошибается он, лишь пока ничего не делает. В современной теории творческого мышления обосновано, что в процессе решения трудных творческих задач неизбежен проход через ошибки. Поэтому одна из самых вредных особенностей традиционного подхода к обучению — рассмотрение ошибки как криминала30. На занятиях первое, к чему приходится приучать первокурсников, — не стесняться ошибок.<br>Более того, отличить глубокое понимание от формального запоминания гораздо легче, когда имеешь дело с ошибками: качество ошибок просто несравнимо. Поэтому часть упражнений направлена на выработку умения исправлять неточности в доказательствах и формулировках без полного отвержения частично неправильных построений.</p>
-<p>С этим же связано то, что мы не любим ставить задачи в форме<br>«Доказать, что. . . » Готовая истина не способствует развитию творческого мышления. Далее, при таких формулировках возникает громадный соблазн действовать по принципу: «Вы скажите нам, что нужно доказать, а мы уж докажем»31. Тем не менее порою приходится формулировать и задачи на доказательство.</p>
-<p>ПРЕДУПРЕЖДЕНИЕ<br>Для борьбы с указанной выше болезнью несколько задач на доказательство являются задачами-ловушками. Это необходимо для приучения учащихся к дисциплине ума:проверяй доказываемое32!</p>
-<p>Не все части данного пособия одинаково фундаментальны. В частности, могут быть опущены некоторые параграфы из первой части (её последней главы). Глава, посвящённая нестандартному анализу, полностью независима от последующего материала и также может быть опущена. Возможны и многие другие варианты компоновки курса в зависимости от вкусов и уровня подготовки преподавателя33. Скажем,</p>
-<p>30Впрочем, если стремимся наставлять на Единственно Истинный Путь, ничего другого не остаётся.</p>
-<p>31Формулировка данного принципа принадлежит студентам Высшего Юридического колледжа УдГУ.</p>
-<p>32см. замечание 10 на стр. 156<br>33Опыт преподавания отнюдь не лучшим студентам в Удмуртском университете убедил, что этот материал может быть донесён до студентов весьма среднего уровня, так что уровень подготовки студентов здесь второстепенный фактор. А в xxiv ВВЕДЕНИЕ хотя глава о семантических таблицах является центральной во второй части, в ней можно опустить последний параграф, посвященный устранению сечений. Минимальный вариант изучения второй части —главы, посвященные синтаксису и семантическим таблицам. К ним могут независимо добавляться главы, посвященные естественному выводу, теории определений, теореме Гёделя, нестандартному анализу. Что брать из третьей и четвёртой части — дело вкуса и конкретных потребностей преподавателя.</p>
-<p>Стоит найти возможность установить себе и рекомендовать студентам обучающие программы высокого уровня (например, Tarski<br>(https://github.com/spamegg1/tarski),<br>Verifikator<br>(https://www.logicinaction.org/AUC/apps/javascript/Smiley/index.html),<br>First-Order Logic Workbook<br>(https://www7.in.tum.de/%7Ekretinsk/fomeo.html)или The Logic Machine [162]),то стоит воспользоваться этими программами34. Кое-где в тексте есть прямые указания на то, как их можно применить для практических занятий.</p>
-<p>Отметим несколько принятых в данной книге условных обозначений.</p>
-<p>Три вида кавычек “ ”, ‘ ’, « » употребляются как модальности.<br>Первый из них (общеупотребительный в англоязычной литературе)означает, что слова употреблены в переносном смысле, а если они окружают слова, идея которых приписана другим, то формулировка<br>(дабы подчеркнуть смысл) преобразована автором. Второй — что данное слово, например, ‘кавычки’, в данном контексте используется как имя понятия, а не как понятие, обозначаемое данным именем. Третий вид — не преобразовывавшаяся цитата либо слова, взятые из фольклора. Стандартные русские кавычки, заимствованные из немецкого языка: „ “ — оскорбляют математический вкус автора (левая из них выглядит как закрывающая, а правая — как открывающая), и поэтому не применяются.</p>
-<p>Выделение рублёным шрифтом означает чисто формальное имя,встретившееся в нашем тексте. Например, так мы обозначаем идентификатор из программы, о котором говорится вне текста данной программы. Математические символы, написанные прозрачным шрифтом, скажем, Z, означают фиксированные математические понятия,дальнейшем и уровень студентов повысился. . . и вновь резко упал после приведения образования в соответствие со «стандартами».</p>
-<p>34см. замечание 11 на стр. 156</p>
-<p>IN.4. ВВЕДЕНИЕ КО ВТОРОМУ ИЗДАНИЮ xxv чаще всего — общеупотребительные множества. Остальные типы выделений используются прежде всего для привлечения внимания и фиксированного смысла не имеют.</p>
-<p>И в заключение автор благодарит свою жену Людмилу, неоднократно читавшую рукопись и немало способствовавшую улучшению изложения; дочь Антонину и В. В. Пупышева, выловивших кучу опечаток; рецензентов и профессора А. П. Бельтюкова, сделавших ряд ценных замечаний. Некоторые примечания А. П. Бельтюкова вошли в текст книги, они помечены буквами (АПБ).</p>
-<p>In.4 Введение ко второму изданию<br>Неклассические логики получили большие и важные применения в последние десятилетия. Это связано с несколькими принципиальными моментами.</p>
-<p>Классическая логика является весьма мощным средством описания и дедукции. Но она, конечно же, имеет ограничения, явные и неявные предположения, заложенные в ее основу. Явные предположения (типа того, что логическими значениями являются лишь 0 и 1) легко нарушаются столь же явно. Неявные же (самое важное из них то, что логика описывает состояние вполне определенной совокупности понятий в некоторый момент и для достижения фиксированной цели), как всегда, гораздо важнее и труднее преодолеваются.</p>
-<p>В неклассических логиках особенно чётко прослеживается беда современной прикладной науки, основанной в большинстве случаев на плоском одноуровневом мышлении: соблазн воспользоваться “царскими путями”35, то есть привлекательными возможностями прямого приложения мощных теоретических результатов, изредка открывающимися в ходе развития науки.</p>
-<p>Лучшие военные прекрасно понимают, что прямое наступление —самый лучший способ зря растратить силы и, увлёкшись видимостью побед, проиграть кампанию.</p>
-<p>У Цзы заметил [35, гл. 1, ч. 3]:</p>
-<p>Мало таких, кто овладел Поднебесной частыми победами, но много таких, кто от таких побед погибал.</p>
-<p>35По легенде, Евклид ответил на вопрос одного из Птолемеев: «Нельзя ли полегче научиться геометрии?» — словами: «В геометрии нет царских путей!»xxvi ВВЕДЕНИЕ</p>
-<p>Мы основываемся на точке зрения, что наш Мир имеет единую<br>Мировую Идею, заложенную в его начале36</p>
-<p>Мировая Идея умнее и изощрённее самого гениального полководца, и она, конечно же, активно завлекает тех, кто стремится примитивными средствами достичь её, в соблазнительные ловушки. Поэтому нужно развивать разнообразные средства и, более того, средства анализа средств, с тем, чтобы гибко выбирать наиболее подходящий инструмент в данной ситуации для данной цели.</p>
-<p>Избежать лобового столкновения с трудностями можно несколькими путями. Во-первых, можно перепрыгнуть через них, воспользовавшись идеальными понятиями высокого уровня и затем конкретизировав их в новой обстановке. Во-вторых, можно обойти заминированные места, рассмотрев другие аспекты проблемы и уже от них вернувшись к нашей непосредственной цели. И то, и другое решение требует владения двумя умениями: многоуровневым подходом к выбору средств и к оценке результатов; искусством перевода как между различными формализмами, так и между формализмами и естественным языком.</p>
-<p>Введение в такое использование современных логических средств —цель данного пособия.</p>
-<p>In.5 Введение к третьему изданию<br>Между вторым и третьим изданием прошло больше времени, чем между первым и вторым. За это время система знаний и умений, фундаментом которой является прикладная логика, показала свою жизнеспособность и, более того, было осознано не только автором, что логика может стать центральным курсом в системе преподавания для подготовки, в частности, информатиков высшего уровня, в результате чего и сопротивление этому неизмеримо возросло.</p>
-<p>На базе логики зоопарк «парадигм» программирования превращён в систему взаимодополняющих, но взаимно несовместимых стилей; системный подход к программированию изложен в книге [56] и в учебнике [57].</p>
-<p>Сам Ижевск в «нулевые годы» превратился в один из признанных центров образования России в области информатики, наши студентыинформатики как минимум не уступали по уровню подготовки московским и петербургским37.</p>
-<p>36см. замечание 8 на стр. 155<br>37Но слишком многое держалось в Удмуртском университете на отдельных личностях. В частности, на его ректоре В. А. Журавлёве. После его смерти потенциал</p>
-<p>IN.5. ВВЕДЕНИЕ К ТРЕТЬЕМУ ИЗДАНИЮ xxvii</p>
-<p>Всё это потребовало переработки текста книги и значительных дополнений материала, посвященного взаимосвязям логики с другими отраслями знаний. В третьем издании внесены поправки практически на каждой странице книги. В частности, всюду, за исключением исторических экскурсов, изгнан термин «математическая логика», поскольку перечисленные выше задачи и потребности может поддерживать лишь логика как целостная наука высшего уровня. Появилась новая часть: «Конструктивные и методологические аспекты логики»,посвящённая первичным навыкам анализа сложных понятий при помощи логики.</p>
-<p>Поскольку распространённые в математической традиции бесцветные названия типа «нормальное распределение» только дезориентируют, а названия по имени открывателя служат лишь исторической справедливости38, у нас все теоремы называются содержательными именами, а имя автора добавляется в скобках. Поскольку это изменение последовательно проведено лишь в третьем издании, автор будет благодарен за замечания по поводу названий теорем и понятий.</p>
-<p>В первых двух изданиях программистские примеры приводились на языке Pascal либо в ‘паскалеподобной’ форме, если в программировании такое не выражалось либо выражалось слишком неестественно. Сейчас Pascal вышел из моды. Последняя ниша, которую он удерживал, было спортивное программирование,где чемпионы мира из России и Китая слишком часто писали программы на Pascal; в итоге американцы его запретили и здесь. Принципиально принято решение не менять этого и в новом издании. В рассматриваемых контекстах все языки программирования почти изоморфны друг другу, и становиться в тупик при небольшой замене обозначений недостойно для знающего прикладную логику. Более того, умение воспринимать другие логически несущественно отличные обозначения без их ‘изучения’ является важным практическим, в частности, для информатиков.</p>
-<p>Осознана также методологическая роль логики: она может служить основой системы интеллектуальной и духовной самозащиты в дезинформационном обществе39. Страшно, если мы вырастим из интеллектуалов нетократов. Ещё страшнее, если они устроят революцию.<br>Большевики по крайней мере были материалистами, а эти вообще не сопротивления гибельным реформам в образовании и своего собственного пути быстро иссяк.</p>
-<p>38И это отнюдь не всегда; вспомним скандал с правилом Лопиталя: сам автор этого названия отказался от него, но оно так и застыло в математической традиции.</p>
-<p>39Термин принадлежит А. П. Бельтюкову; автор с ним полностью согласен.xxviii ВВЕДЕНИЕ имеют никакого представления о мире, зато имеют иллюзию, что любую травму можно «в фотошопчике подправить», и всё, что угодно,можно изменить, впустив соответствующую дезинформацию. Поэтому многими40 осознана контрреволюционная и консервативная роль данной книги, способствующей удержанию России от глупостей «цветной революции».</p>
-<p>Должен заметить: видимо, впервые термин ‘прикладная логика’был использован в книге Коэна и Нагеля [36], первое издание которой вышло в 1934 г. Абстрактно логически этот термин использован в том же смысле, что и у нас, но содержание его за прошедший век изменилось коренным образом, в связи с развитием логики и широчайшими приложениями её передовых разделов в самых разных областях,что трудно было представить себе в 1934 году. Основополагающие блестящие логические исследования того времени были проигнорированы авторами, там лишь несколько слов об алгебре Буля вековой давности.<br>Данное замечание не умаляет высочайшего уровня изложения и мысли в этой книге, сконцентрировавшей перед глобальным очарованием символической математической логикой основные идеи классической содержательной логики в достаточно современной форме. В частности,поэтому можно высказать жёсткое утверждение. Человек, изучавший современный учебник по логике и не читавший книги [36], остаётся полуобразованным в данной области, что слишком часто намного хуже,чем невежда.</p>
-<p>Автор благодарен читателям41 за массу замечаний по изложению материала, за найденные ими ошибки и опечатки. В предметном указателе автор и читатели стали жертвами «улучшений» в новых версиях<br>TeX. Теперь он воспринимает любые символы Юникода, но русские буквы перестали считаться буквами, и термины (а также фамилии)он упорядочивает по внутренним командам этих символов. Так что они сортируются в порядке их названий в латинском алфавите.</p>
-<p>40Даже американцами, которые отказали в публикации перевода, поскольку<br>«Книга противоречит ценностям потребительского общества и американской демократии». Я жалею, что сгоряча стёр это письмо.</p>
-<p>41Прежде всего, человеку, выступавшему под ехидным ником «Свин со свинофермы», и В. Круткину.</p>
-<p>IN.6. ВВЕДЕНИЕ К ЧЕТВЁРТОМУ ИЗДАНИЮ (ЧЕРНОВИК)xxix</p>
-<p>In.6 Введение к четвёртому изданию (черновик)</p>
-<p>Когда я в 1990 году начал, воспользовавшись ослаблением административного ‘порядка’, понимающей позицией коллег и поддержкой ректора УдГУ Журавлёва, перестройку цикла курсов по математике для студентов-программистов, поставив на центральное место прикладную логику, я не представлял, во что это выльется. Так же не мог знать, что изданное в 1991 году методическое пособие на 18 стр.<br>«Язык математики» вырастет в книгу из 542 стр., которая признана и как учебник для младших курсов, и как учебное пособие для старшекурсников и магистров, ит как монография по логике, информатике и философии. Сейчас его вновь переиздаёт ведущее российское издательство URSS. Новое издание будет доработанным и несколько расширенным, с добавлением логик ограниченных ресурсов.</p>
-<p>Поскольку многие заинтересованные читатели одобряли двуслойность текста (где сноски образовывали собственный контекст), но на самом деле слоёв больше, я решил создать отдельную часть в конце книги, специально для неглавных слоёв изложения и связать основные её элементы двусторонними ссылками на места в основном тексте, к которым он относятся. Из-за многослойности и одновременно связанности общими идеями иногда такие взаимно-обратные ссылки связывают части основного текста и разные дополнения. Словом, у нас возник граф зависимостей и в pdf книги он поддерживается. Явно выписывать его я не собираюсь, интересующийся легко пройдёт по содержательно нужными ему путям без распутывания паутины дуг и вершин.xxx ВВЕДЕНИЕ</p>
-<p>Отзывы о логике<br>От незнания логики погибло больше кораблей, чем от незнания навигации.<br>(Уильям Томсон, лорд Кельвин)</p>
-<p>Логика — единственная дисциплина, ставящая своей целью не сообщение некоторой суммы знаний, которую необходимо усвоить, а развитие мышления.<br>(А. Уёмов)</p>
-<p>Неправильность ума порождает не только те заблуждения, которые проникают в науки. Она является причиной большей части ошибок, совершаемых нами в повседневной жизни: беспочвенных раздоров, безосновательных тяжб, скоропалительных решений, непродуманных начинаний.<br>(А. Арно, П. Николь)</p>
-<p>Логика есть великий преследователь темного и запутанного мышления; она рассеивает туман, скрывающий от нас наше невежество и заставляющий нас думать, что мы понимаем предмет, в то время, когда мы его не понимаем.<br>(Д.-С. Милль)</p>
-<p>Логика Аристотеля не будет лишней до тех пор, пока слова будут вводить людей в заблуждение.<br>(В. Минто)</p>
-<p>Часть I</p>
-<p>Язык математики</p>
-<p>1</p>
-<p>Глава 1</p>
-<p>Необходимость точного языка в математике</p>
-<p>1.1 Как и почему появился язык математической логики?</p>
-<p>Математика изучает объекты, свойства которых точно сформулированы.</p>
-<p>Это описание поля деятельности современной математики не претендует на полноту. Оно, скорее, достаточно широко и отбрасывает лишь те случаи, когда говорить о применении математики ещё рано1. Описание включает и традиционные разделы, такие как геометрия и алгебра, и новые, такие как математическая лингвистика либо теория генетического кода.</p>
-<p>Хотя само описание говорит о точных формулировках, в нём требуют разъяснения в первую очередь последние слова: «точно сформулированы». Очевидно, что их уточнение влечет за собой уточнение и других понятий, в частности ‘объекта’ и ‘свойства’. Какие формулировки можно считать точными, постараемся разобраться дальше.</p>
-<p>Очевидно, что не всё, выражающееся на естественном языке, точно. Иногда такая неточность лежит на поверхности, как, например, во фразах: «Хочется чего-то, а чего — неясно» или «Оно, конечно, ежели что как. . . А ежели что не так?» Иногда смысл фразы явно зависит</p>
-<p>1см. замечание 12 на стр. 157</p>
-<p>2</p>
-<p>1.1. КАК И ПОЧЕМУ ОН ПОЯВИЛСЯ? 3 от контекста, например: «Сейчас я намылю ему шею». Богатство любого естественного языка неразрывно связано с его многозначностью.<br>Зависимость от контекста не всегда отрицательный фактор, лишь бы в любой данной ситуации предложение уточнялось однозначно.</p>
-<p>Например, достаточно безобидное на вид предложение</p>
-<p>«Он встретил её на поляне с цветами» (1.1)имеет три различных истолкования. Вот от такой неоднозначности хотелось бы раз и навсегда застраховаться в математике. Поэтому математики с самого начала стремились формулировать доказательства и теоремы на как можно более чётком, хотя и бедном, диалекте естественного языка. Словарный запас этого диалекта постоянно расширяется, но основные формы предложений, связки, союзы остаются практически теми, что были выработаны ещё в античные времена. Следует заметить, что способы выражения, допустимые в математике, нигде не описывались явно: ими овладевали на примерах, в процессе обучения и чтения классических трудов, в первую очередь «Элементов» Евклида.</p>
-<p>Долгое время считалось, что ‘математический диалект’ состоит из строго сформулированных предложений, да и сейчас он верно служит математикам, почти никогда их не подводя. В геометрии и до сих пор его достаточно. Но уже в средние века развитие алгебры привело к тому, что формулировки теорем зачастую становились всё длиннее,необозримее и неудобнее. Соответственно, выкладки становились всё более и более трудными. В самом деле, даже чтобы понять фразу</p>
-<p>Квадрат первого, сложенный с квадратом второго и с удвоенным произведением первого на второе, есть квадрат первого, сложенного со вторым,</p>
-<p>(1.2)требуется значительное усилие. Таким образом, математическая строгость и удобство начали противоречить друг другу.</p>
-<p>Выход был найден, когда заметили, что использованная в (1.2)часть математического языка может быть сведена к нескольким условным знакам, и сейчас (1.2) записывается кратко и ясно:x2 + 2xy + y2 = (x+ y)2. (1.3)</p>
-<p>Это стало первым этапом уточнения математического языка: был создан символизм арифметических выражений, их равенств и неравенств. К XVIII в. математические формулы записывались почти в том же виде, что и сейчас.</p>
-<p>4 ГЛАВА 1. НЕОБХОДИМОСТЬ ТОЧНОГО ЯЗЫКА</p>
-<p>Однако более сложные математические утверждения по-прежнему записывались на обычном языке с вкраплениями формул. И чем дальше развивалась математика, чем больше понятий входило в её словарь, тем ближе придвигались к её границам парадоксы, связанные с неоднозначностью и недоопределенностью предложений естественного языка. Рассмотрим один из самых ярких и элементарных примеров.</p>
-<p>Как известно, некоторые фразы служат определениями натуральных чисел, например:</p>
-<p>«Десять в степени десять в степени десять» (1.4)</p>
-<p>«Наименьшее простое число, большее миллиона» (1.5)</p>
-<p>В русском языке 33 буквы, и предложений, состоящих не более чем из ста букв, конечное число (грубо говоря, не более 33101). Натуральных чисел же бесконечно много. Значит, среди них должны быть такие,которые нельзя назвать фразой, состоящей менее чем из ста букв. Но тогда есть и наименьшее такое число. Его можно определить как</p>
-<p>‘Наименьшее натуральное число, которое нельзя определить фразой русского языка, содержащей менее ста букв’.</p>
-<p>(1.6)</p>
-<p>Это предложение содержит 96 букв. Следовательно, определение (1.6)противоречит самому себе.<br>(Парадокс Берри. 1906 г.) Три разнородных примера на его появление в практике даны в примечаниях2.</p>
-<p>Казалось бы, рассуждение из парадокса Берри явно нематематическое. Однако уже в те времена подобные конструкции встречались в теории множеств, а сейчас рассуждения такого рода обычны в разделах математической логики и теории алгоритмов, исследующих сложность описания математических объектов. В частности, подобная идея лежит в основе знаменитой теоремы Гёделя3 о неполноте любой достаточно сильной формальной теории.</p>
-<p>Если парадокс Берри возник на границе между математикой и естественным языком, то парадокс Рассела возник внутри самой математики — в теории множеств.</p>
-<p>2см. замечание 13 на стр. 157<br>3Эта теорема является одной из целей нашего курса.</p>
-<p>1.1. КАК И ПОЧЕМУ ОН ПОЯВИЛСЯ? 5</p>
-<p>Пусть z — множество тех множеств, которые не являются собственными элементами. То есть x ∈ z тогда и только тогда, когда неверно, что x ∈ x. Символически z = {x | x /∈ x} .<br>Подставляя z вместо x в определение z, получаем, что z ∈ z тогда и только тогда, когда z /∈ z.</p>
-<p>(1.7)</p>
-<p>Появление первых парадоксов внутри математики ошеломило сообщество специалистов и послужило поводом, чтобы предпринять систематическое построение современной логики. А причиной её возникновения было то, что математический диалект естественного языка опять-таки, как и в средние века, перестал удовлетворять требованиям компактности и удобства при записи формулировок теорем, и в особенности при манипуляциях с этими формулировками. Например,вот одно из элементарных определений математического анализа:</p>
-<p>Функция f , определенная на множестве M , непрерывна на M , если для каждого x из M и для любого сколь угодно малого положительного ε найдется такое положительное δ, зависящее от ε, что, когда x1 лежит в M и отличается от x меньше, чем на δ, f(x1) отличается от f(x) меньше, чем на ε.</p>
-<p>(1.8)</p>
-<p>Построить, скажем, отрицание понятия непрерывности, содержательно вдаваясь в смысл фразы (1.8), не менее трудно, чем преобразовывать алгебраические тождества, записанные в виде (1.2). В современном символизме «f непрерывна на M» записывается компактно и изящно:</p>
-<p>∀x ∈M ∀ε &gt; 0∃δ &gt; 0∀x1 ∈M<br>(|x− x1| &lt; δ ⇒ |f(x)− f(x1)| &lt; ε).</p>
-<p>(1.9)</p>
-<p>Язык математической логики, ставший символическим языком современной математики, возник в тот момент, когда неудобство математического языка для нужд математики было окончательно осознано.<br>Так же, как и символизм алгебраических выражений, новый символизм прояснил механическую природу многих преобразований, позволил дать простые алгоритмы их осуществления, и тем самым освободил головы математиков для более важных дел.</p>
-<p>6 ГЛАВА 1. НЕОБХОДИМОСТЬ ТОЧНОГО ЯЗЫКА</p>
-<p>Кроме того, впервые появилась возможность строго ответить на вопрос: а что значит ‘точно сформулированное высказывание’? Это высказывание, которое может быть однозначно переведено на символический язык математики.</p>
-<p>В дальнейшем язык математической логики был успешно применен и к областям, которые лежат вне рамок математики как науки и резко отличаются от неё по своей парадигме: информатика, философия, лингвистика, психология и так далее, тем самым превратившись из языка математической логики в язык логики.</p>
-<p>Формализация математики привела к более ясному осознанию природы самой математики, к триумфальному применению её к нечисловым и непространственным объектам, таким как, например, гены,естественные и искусственные языки, программы для ЭВМ и т. д. Вместе с тем стало ясно и то, когда не стоит применять математику. До тех пор, пока наши знания о некоторой конкретной области не могут быть переведены на формальный математический язык единообразным методом, мы ещё не осознали исходные понятия и их свойства настолько, чтобы применять математические методы, и “математизация” превращается в род шаманства4, призванного придать наукообразие тексту. А когда можно точно сформулировать свойства ясно выделенных нами исходных понятий, можно применять математику для извлечения следствий из этих свойств.</p>
-<p>Итак, первой проблемой, которую поставила жизнь перед математической логикой, была следующая.</p>
-<p>Основная задача языка математики<br>Дать точное и удобное определение математического суждения, то есть определить язык, который удовлетворял бы трём требованиям:</p>
-<p>1. на этот язык можно перевести математические утверждения и точные утверждения некоторых других наук,</p>
-<p>2. он допускает сравнительно легкий перевод на обычный язык,</p>
-<p>3. записи на нём компактны и удобны в обращении.</p>
-<p>(1.10)</p>
-<p>4В лучшем случае, в рениксу 12, стр. 157.</p>
-<p>1.1. КАК И ПОЧЕМУ ОН ПОЯВИЛСЯ? 7</p>
-<p>Первая часть нашего пособия посвящена демонстрции используемого в современной математике решения этой проблемы. Мы стремимся осветить с единой точки зрения языком и дать навыки владения этим языком.</p>
-<p>В сущности, в первой части почти не затрагивается материал собственно логики как науки, в нём выдерживается лишь логический подход к изучаемым понятиям. Сама логика начинается со второй задачи,неразрывно связанной с основной задачей языка математики.</p>
-<p>Основная задача логической семантики5</p>
-<p>Дать чёткое и однозначное истолкование суждений формального языка, одновременно как можно более простое и как можно более близкое к естественному математическому пониманию.</p>
-<p>(1.11)</p>
-<p>Конечно же, мы вынуждены касаться отдельных аспектов этой задачи уже в первой части, но лишь в простейших случаях.</p>
-<p>Подытожим:<br>Объект логики<br>Труднее всего поддается уточнению само понятие точности.Формальный язык должен полностью исключать неоднозначности.<br>Смысл предложений формального языка должен быть строго и до конца определен, и поэтому все понятия становятся терминами.<br>Не всякое использование формального языка ведет к уточнению.<br>Формальная проверка зачастую сильнее содержательной.<br>Формальный язык позволяет значительно эффективнее преобразовывать выражения, чем содержательный.<br>Содержательная проверка не может быть полностью заменена формальной, а формальная — содержательной.<br>Содержательный язык не может быть полностью заменен формальным, но абсурдно использовать его, когда решаемая задача полностью уточнена и ложится на язык логики.</p>
-<p>5Семантика — наука, изучающая смысл предложений естественного либо формального языка.</p>
-<p>8 ГЛАВА 1. НЕОБХОДИМОСТЬ ТОЧНОГО ЯЗЫКА</p>
-<p>Предмет логики<br>Математическая логика — наука, изучающая саму математику математическими средствами.<br>Логика не сводится к математической логике, поскольку не ограничивается в своей области исследований и приложений лишь математикой и не связана традициями математики.<br>Логика изучает формальную структуру рассуждений прежде всего математическими средствами.<br>Когда сложность утверждений науки либо практики превосходит определённый предел, начинается либо процесс формализации, либо процесс распада (см. постмодернизм в качестве примера процесса распада).<br>Не всякая точная задача ложится на язык логики6.</p>
-<p>Упражнения к § 1.1<br>1.1.1. (Л. С. Выготский) Сколько различных смыслов имеет предложение:<br>Предложение рабочих бригад вызвало осуждение товарища Иванова</p>
-<p>1.1.2. (Х. Б. Карри) Докажите, что из существования множества всех таких множеств x, что если x является своим элементом, то выполнено A, следует, что A истинно.</p>
-<p>1.1.3. Какое из предложений (1.4), (1.5) неоднозначно? Как его переформулировать, чтобы оно стало однозначным?</p>
-<p>1.2 Зачем изучать формальный язык математики?</p>
-<p>Сейчас мне даже не приходится убеждать Вас, что для точных областей деятельности необходимо создавать точный формальный язык.</p>
-<p>6Это замечание необходимо сделать уже сейчас, хотя раскрываться оно будет и в дальнейшем, и в течение всей Вашей жизни. Тот, кто не осознаёт ограничений используемых им методов и использует их в неподходящем месте, обычно называется профессиональный кретин.</p>
-<p>1.2. ЗАЧЕМ ИЗУЧАТЬ? 9</p>
-      </div>
-    </article>
-  </div>
-</main>
 
-<footer class="site-footer">
-  <div class="wrap">
-    <span>© 2026 Читалка</span>
-    <span>Сгенерировано из файла: НВПрЛог1.txt</span>
-  </div>
-</footer>
+</article>
 
-</body>
-</html>
+
+</body></html>
