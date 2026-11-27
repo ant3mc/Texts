@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
+<html lang="ru"><head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'">
   <title>Модель исполнения JavaScript по спецификации ECMAScript: call stack, контексты, окружения и замыкания</title>
@@ -277,9 +276,97 @@ body.edit-mode .reader-body { cursor: crosshair; }
   :root { --reader-font-size: 11pt; }
   body { max-width: 680px; margin: 0 auto; padding: 28px 20px 40px; }
   </style>
-</head>
+<style data-hyphenizer="1">/* ==== Автопереносы: вставлено русификатором ==== */
+html, body {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 4 2 2;
+  hyphenate-limit-zone: 1%;
+  hyphenate-limit-lines: 9;
+}
+/* Базовый размер шрифта: 48px для html, body и article */
+html, body, article { font-size: 48px !important; }
+/* Ширина: html и body — на всю ширину, без ограничений и отступов */
+html, body {
+  width: 100% !important;
+  max-width: none !important;
+  max-inline-size: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+article {
+  width: 100% !important;
+  max-width: none !important;
+  max-inline-size: none !important;
+  padding: 0 0 0 4px !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+/* Сброс ограничений ширины и правых отступов у контейнеров:
+   снимает max-width и центрирование через margin:auto,
+   из-за которых справа оставалось пустое место */
+body div, body section, body main, body article, body .page {
+  max-width: none !important;
+  max-inline-size: none !important;
+  width: auto !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-inline-start: 0 !important;
+  margin-inline-end: 0 !important;
+  padding-right: 0 !important;
+  padding-inline-end: 0 !important;
+  box-sizing: border-box;
+}
+body [class*="content"]:not(img):not(svg):not(video):not(iframe):not(canvas):not(picture),
+body [class*="container"]:not(img):not(svg):not(video):not(iframe):not(canvas):not(picture),
+body [class*="wrapper"]:not(img):not(svg):not(video):not(iframe):not(canvas):not(picture),
+body [id*="content"]:not(img):not(svg):not(video):not(iframe):not(canvas):not(picture),
+body [id*="page"]:not(img):not(svg):not(video):not(iframe):not(canvas):not(picture) {
+  max-width: none !important;
+  max-inline-size: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-inline-start: 0 !important;
+  margin-inline-end: 0 !important;
+  padding-right: 0 !important;
+  padding-inline-end: 0 !important;
+  box-sizing: border-box;
+}
+/* Примечания, замечания, врезки, сноски: правый край как у обычного текста */
+body blockquote,
+body aside,
+body figure,
+body .note,
+body .notice,
+body .remark,
+body .callout,
+body .admonition,
+body .warning,
+body .tip,
+body .info,
+body .footnote,
+body [class*="note"],
+body [class*="remark"],
+body [class*="callout"],
+body [class*="admonition"] {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+body p, body li, body dd, body dt,
+body blockquote, body td, body th, body figcaption,
+body summary, body h1, body h2, body h3,
+body h4, body h5, body h6 {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+/* Код, формулы, схемы — не переносим */
+pre, code, kbd, samp, var, tt,
+.katex, .katex-display, .math-display, .mermaid, .raw, .hljs {
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}</style></head>
 <body class="">
-  <article>
+  <article lang="ru">
     <div class="reader-header">
       <h1 class="reader-title">Модель исполнения JavaScript по спецификации ECMAScript: call stack, контексты, окружения и замыкания</h1>
       <p class="reader-meta">nkolmykov28  июл   в 06:00  ·  28 июля 2026 г.  ·  Habr</p>
@@ -356,5 +443,5 @@ console.log('после');
 </code></pre><p>А теперь самое неожиданное: того, что ты привык называть «event loop», в современной ECMA-262 нет вообще. Это легко проверить грепом по тексту стандарта - слова <strong>microtask, macrotask, event loop, task queue и job queue встречаются там ноль раз</strong>. Ни одного.</p><p>То есть ни микрозадач с макрозадачами, ни их приоритетов, ни самого факта, что <code>setTimeout</code> бежит позже промиса, язык не описывает. Есть только определение Job’а и условие «пустой стек». Как Job’ы копятся, в каком порядке и с каким приоритетом достаются - целиком на host-defined операциях <code>HostEnqueue…Job</code>.</p><p>Живёт всё это в другом документе - в HTML Standard, в его модели исполнения: там и настоящий event loop, и очереди задач и микрозадач. Именно по его правилам промис-Job выполняется раньше таймера, хотя, забегая вперёд, дело там вовсе не в приоритете. Забавно, что сама ECMA-262 при этом говорит именно о приоритете: в примечании к разделу про Job’ы сказано, что браузеры и Node трактуют промис-Job’ы как более приоритетные и что будущие фичи могут добавить Job’ы без такого приоритета. То есть язык признаёт сложившуюся практику, но гарантией её не делает. Разбору этой второй половины - как HTML достраивает над Job’ами полноценный цикл событий - я планирую посвятить отдельную статью, прямое продолжение этой.</p><p>Вот, собственно, и вся граница. Синхронная модель - стек, кадры, окружения, running-контекст - заканчивается на пустом стеке. Всё, что происходит «потом», держится на Job’е: отложенном замыкании с единственным условием запуска - чтобы стек опустел. async, <code>.then</code>-цепочки, генераторные продолжения - это структуры данных плюс Job, который в нужный момент вернёт кадр к жизни.</p><hr><h3>Оговорка напоследок</h3><p>Всё это на самом деле заметно сложнее, чем выглядит здесь. Модель, которую мы разобрали, держится на сотнях абстрактных операций, внутренних слотов и правил статической семантики, и вызывают они друг друга каскадом: за одной строчкой <code>const x = 1</code> стоит цепочка шагов, где каждый тянет следующий, тот - третий, и так до самого низа. Разворачивать эту машинерию я сознательно не стал: иначе статья превратилась бы в пересказ алгоритмов, а за названиями операций потерялась бы общая картина.</p><p>Поэтому здесь - каркас. Какие сущности несут модель, как они ссылаются друг на друга и почему из этого получается именно такое поведение, а не другое. Если однажды понадобится точность до шага, дорога открыта: можно открыть нужный раздел спецификации и читать его, уже понимая, куда она встраивается.</p><hr><p>И напоследок ещё два случая из той же серии. «Temporal dead zone» в стандарте не встречается ни разу - есть лишь неинициализированная привязка и ReferenceError при обращении к ней. С хойстингом тоньше: отдельного механизма «поднятия наверх» в алгоритмах нет - привязки просто заводятся раньше, чем побежит код. Само слово hoist встречается разве что в паре примечаний, как раз в этом смысле.</p><p>В статью я это не потащил: к самой модели исполнения ни хойстинг, ни TDZ прямого отношения не имеют - они из неё вытекают, но описаны в другом слое - в алгоритмах, которые заводят привязки в окружении до того, как побежит код. Оба сюжета я разобрал дополнением к этой статье в своём телеграм-канале <a href="https://t.me/w3d_code" rel="noopener noreferrer" target="_blank">w3d_coder</a> - там же и остальное про js-разработку.</p></div></div></div>
     <div class="reader-source">Source: <a href="https://habr.com/ru/articles/1063168/">https://habr.com/ru/articles/1063168/</a></div>
   </article>
-</body>
-</html>
+
+</body></html>
